@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane alignment="center" hgap="10" prefHeight="700.0" prefWidth="1000.0" vgap="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.sla.Controller">
+   <children>
+      <HBox prefHeight="27.0" prefWidth="1000.0">
+         <children>
+            <Button fx:id="getAvatarButton" mnemonicParsing="false" onAction="#updateAvatar" prefHeight="27.0" prefWidth="100.0" text="Avatar" />
+            <ImageView fx:id="avatarView" fitHeight="27.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="importButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#importData" prefHeight="27.0" prefWidth="200.0" text="Import Albums" />
+            <Button fx:id="addButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addRow" prefHeight="27.0" prefWidth="200.0" text="Add Empty Album" />
+            <Button fx:id="deleteButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deleteRow" prefHeight="27.0" prefWidth="200.0" text="Delete Album" />
+            <Button fx:id="saveButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#save" prefHeight="27.0" prefWidth="200.0" text="Save Albums" />
+         </children>
+      </HBox>
+      <TableView fx:id="tableForData" maxWidth="1.7976931348623157E308" prefHeight="662.0" prefWidth="1000.0" GridPane.columnSpan="2147483647" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+        <columns>
+          <TableColumn fx:id="albumRankColumn" prefWidth="50.0" text="Rank" />
+          <TableColumn fx:id="artistColumn" prefWidth="250.0" text="Artist" />
+            <TableColumn fx:id="nameColumn" prefWidth="300.0" text="Album" />
+            <TableColumn fx:id="yearColumn" prefWidth="50.0" text="Year" />
+            <TableColumn fx:id="genreColumn" prefWidth="150.0" text="Genre" />
+            <TableColumn fx:id="certifiedSalesColumn" prefWidth="100.0" text="Certified Sales" />
+            <TableColumn fx:id="claimedSalesColumn" prefWidth="100.0" text="Claimed Sales" />
+        </columns>
+      </TableView>
+      <HBox prefHeight="27.0" prefWidth="200.0" GridPane.rowIndex="2">
+         <children>
+            <Label fx:id="statusLabel" minWidth="50.0" prefHeight="27.0" prefWidth="50.0" text="Status:" />
+            <Label fx:id="statusLabel" maxWidth="1.7976931348623157E308" prefHeight="27.0" prefWidth="1000.0" />
+         </children>
+      </HBox>
+   </children>
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
+</GridPane>
