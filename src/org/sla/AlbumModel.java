@@ -86,44 +86,27 @@ public class AlbumModel implements Serializable {
         }
     }
 
-    static void restoreData(FileInputStream file) {
-        try {
-            // Objects/values will be read from this object stream
-            ObjectInputStream in = new ObjectInputStream(file);
-
-            // 1. Restore the amount of albums in list
-            int numberOfAlbums = in.readInt();
-            System.out.println("restoreData numberOfAlbums" + numberOfAlbums);
-            // 2. Restore each album object
-            for (int i = 0; i < numberOfAlbums; i = i + 1) {
-                AlbumModel nextAlbum = (AlbumModel)in.readObject();
-            }
-            // 3. Restore the avatar
-            setAvatar(SwingFXUtils.toFXImage(ImageIO.read(in), null));
-
-            // Done restoring data; close the object stream
-            in.close();
-        } catch (Exception ex) {
-            System.out.println("Restore exception: ");
-            ex.printStackTrace();
-        }
-    }
-
     static void saveData(FileOutputStream file) {
-        // Serialization
+        // serialize the program's data in this order:
+        // 1. Number of albums in albums list
+        // 2. Each individual album object
+        // 3. The avatar image
         try {
             // Objects/values will be written to this object stream
             ObjectOutputStream out = new ObjectOutputStream(file);
 
-            // 1. Save the amount of albums in list
+            // 1. Save the number of albums in list
             out.writeInt(albums.size());
             // 2. Save each album object
             for (int i = 0; i < albums.size(); i = i + 1) {
-                System.out.println("saveData" + albums.get(i));
                 out.writeObject(albums.get(i));
             }
-            // 3. Save the avatar
+            // 3. Write a long number to create buffer between albums objects and avatar image
+            out.writeLong(100L);
+            // 4. Save the avatar
             ImageIO.write(SwingFXUtils.fromFXImage(avatar, null), "png", out);
+            // 5. Write a long number to create buffer between avatar image and end of file
+            out.writeLong(300L);
 
             // Done saving; close the object stream
             out.close();
@@ -131,7 +114,36 @@ public class AlbumModel implements Serializable {
             System.out.println("Save exception: ");
             ex.printStackTrace();
         }
+    }
 
+    static void restoreData(FileInputStream file) {
+        // deserialize the program's data in this order:
+        // 1. Number of albums in albums list
+        // 2. Each individual album object
+        // 3. The avatar image
+        try {
+            // Objects/values will be read from this object stream
+            ObjectInputStream in = new ObjectInputStream(file);
+
+            // 1. Restore the amount of albums in list
+            int numberOfAlbums = in.readInt();
+            // 2. Restore each album object
+            for (int i = 0; i < numberOfAlbums; i = i + 1) {
+                AlbumModel nextAlbum = (AlbumModel)in.readObject();
+            }
+            // 3. Read and ignore the long buffer between albums objects and avatar image
+            in.readLong();
+            // 4. Restore the avatar
+            setAvatar(SwingFXUtils.toFXImage(ImageIO.read(in), null));
+            // 5. Read and ignore the long buffer between avatar image and end of file
+            in.readLong();
+
+            // Done restoring data; close the object stream
+            in.close();
+        } catch (Exception ex) {
+            System.out.println("Restore exception: ");
+            ex.printStackTrace();
+        }
     }
 
     static void addEmptyAlbum() {
@@ -144,28 +156,11 @@ public class AlbumModel implements Serializable {
     }
 
     // OBJECT METHODS
-    private void readObject(ObjectInputStream inStream) throws IOException, ClassNotFoundException {
-        inStream.defaultReadObject();
-        int ranking = inStream.readInt();
-        String artist = inStream.readUTF();
-        String name = inStream.readUTF();
-        int year = inStream.readInt();
-        String genre = inStream.readUTF();
-        float certifiedSales = inStream.readFloat();
-        int claimedSales = inStream.readInt();
-        albums.add(new AlbumModel(ranking, artist, name, year, genre, certifiedSales,claimedSales));
-
-//        setRanking(inStream.readInt());
-//        setArtist(inStream.readUTF());
-//        setName(inStream.readUTF());
-//        setYear(inStream.readInt());
-//        setGenre(inStream.readUTF());
-//        setCertifiedSales(inStream.readFloat());
-//        setClaimedSales(inStream.readInt());
-    }
-
     private void writeObject(ObjectOutputStream outStream) throws IOException {
+        // Do generic object write first
         outStream.defaultWriteObject();
+
+        // Now write the 7 specific fields for an individual album object
         outStream.writeInt(getRanking());
         outStream.writeUTF(getArtist());
         outStream.writeUTF(getName());
@@ -173,6 +168,22 @@ public class AlbumModel implements Serializable {
         outStream.writeUTF(getGenre());
         outStream.writeFloat(getCertifiedSales());
         outStream.writeInt(getClaimedSales());
+    }
+
+    private void readObject(ObjectInputStream inStream) throws IOException, ClassNotFoundException {
+        // Do generic object read first
+        inStream.defaultReadObject();
+        // Now read the 7 specific fields for an individual album object
+        int ranking = inStream.readInt();
+        String artist = inStream.readUTF();
+        String name = inStream.readUTF();
+        int year = inStream.readInt();
+        String genre = inStream.readUTF();
+        float certifiedSales = inStream.readFloat();
+        int claimedSales = inStream.readInt();
+
+        // Now that we read all of the individual album's data, create the album and add it to the list
+        albums.add(new AlbumModel(ranking, artist, name, year, genre, certifiedSales,claimedSales));
     }
 
     // OBJECT GETTER/SETTER
