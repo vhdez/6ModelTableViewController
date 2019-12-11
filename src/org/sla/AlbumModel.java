@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AlbumModel implements Serializable {
-    static private final long serialVersionUID = 2L;
+    static private final long serialVersionUID = 3L;
 
     // CLASS FIELDS
               private static ObservableList<AlbumModel> albums = FXCollections.observableArrayList();

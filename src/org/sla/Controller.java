@@ -143,9 +143,9 @@ public class Controller {
 
     public void importData() {
         // Bring up File chooser to choose image
-        FileChooser imageChooser = new FileChooser();
-        imageChooser.setTitle("Choose File");
-        File dataFile = imageChooser.showOpenDialog(this.primaryStage);
+        FileChooser dataFileChooser = new FileChooser();
+        dataFileChooser.setTitle("Choose File");
+        File dataFile = dataFileChooser.showOpenDialog(this.primaryStage);
         // Check if an image was chosen
         if (dataFile != null) {
             // Update model
