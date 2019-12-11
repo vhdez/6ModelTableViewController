@@ -97,7 +97,6 @@ public class AlbumModel implements Serializable {
             // 2. Restore each album object
             for (int i = 0; i < numberOfAlbums; i = i + 1) {
                 AlbumModel nextAlbum = (AlbumModel)in.readObject();
-                //albums.add(nextAlbum);
             }
             // 3. Restore the avatar
             setAvatar(SwingFXUtils.toFXImage(ImageIO.read(in), null));
